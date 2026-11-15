@@ -1,8 +1,23 @@
-var builder = WebApplication.CreateBuilder(args);
+using Javaneh.Application.Interface.Repository;
+using Javaneh.Application.Interface.Repository.Users;
+using Javaneh.Infrastructure.Persistence;
+using Javaneh.Infrastructure.Persistence.Repositories;
+using Microsoft.EntityFrameworkCore;
 
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    ));
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddScoped<IUsersRepository, UserRepository>();
+builder.Services.AddScoped(
+    typeof(IRepository<>),
+    typeof(Repository<>)
+);
 
 var app = builder.Build();
 // user seceret
@@ -21,7 +36,7 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", () =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
+    var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
         (
             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
