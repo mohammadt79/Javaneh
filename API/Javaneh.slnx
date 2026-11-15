@@ -1,2 +1,8 @@
 <Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Javaneh.API/Javaneh.API.csproj" />
+    <Project Path="src/Javaneh.Application/Javaneh.Application.csproj" />
+    <Project Path="src/Javaneh.Domain/Javaneh.Domain.csproj" />
+    <Project Path="src/Javaneh.Infrastructure/Javaneh.Infrastructure.csproj" />
+  </Folder>
 </Solution>
