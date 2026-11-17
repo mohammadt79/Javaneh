@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Javaneh.Application.Interface.Repository;
 
 namespace Javaneh.Infrastructure.Persistence.Repositories;
 
-public class Repository<T> where T : class
+public class Repository<T>  where T : class
 {
     protected readonly AppDbContext _context;
     protected readonly DbSet<T> _dbSet;
