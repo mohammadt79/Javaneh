@@ -1,4 +1,3 @@
-using Javaneh.Application.Interface.Repository;
 using Javaneh.Application.Interface.Repository.Users;
 using Javaneh.Application.Interface.services.Users;
 using Javaneh.Infrastructure.Persistence;
@@ -17,6 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IUserservices, UsersServices>();
+builder.Services.AddScoped<IUsersRepository, UserRepository>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
