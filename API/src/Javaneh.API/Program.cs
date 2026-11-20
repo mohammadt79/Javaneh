@@ -1,4 +1,5 @@
 
+using Javaneh.API.Middleware;
 using Javaneh.Application.Interface.Repository.Auth;
 using Javaneh.Application.Interface.Repository.Users;
 using Javaneh.Application.Interface.services.Users;
@@ -56,6 +57,8 @@ builder.Services
     .AddDefaultTokenProviders();
 
 var app = builder.Build();
+
+app.UseMiddleware<GlobalExceptionHandling>();
 
 // Middleware
 if (app.Environment.IsDevelopment())

@@ -1,4 +1,3 @@
-
 using Javaneh.Application.DTOs.Auth;
 using Javaneh.Application.Interface.Repository.Auth;
 using Javaneh.Application.Interface.Services.Auth;
@@ -9,10 +8,14 @@ namespace Javaneh.Application.Services.Auth;
 public class AuthService : IAuthService
 {
     private readonly IAuthRepository _authRepository;
+    private readonly IJwtTokenService _jwtTokenService;
 
-    public AuthService(IAuthRepository authRepository)
+    public AuthService(
+        IAuthRepository authRepository,
+        IJwtTokenService jwtTokenService)
     {
         _authRepository = authRepository;
+        _jwtTokenService = jwtTokenService;
     }
 
     public async Task<AuthResult> RegisterAsync(RegisterRequest request)
@@ -38,8 +41,8 @@ public class AuthService : IAuthService
             {
                 Succeeded = false,
                 Errors = result.Errors
-                 .Select(error => error.Description)
-                 .ToList()
+                    .Select(error => error.Description)
+                    .ToList()
             };
         }
 
@@ -51,7 +54,29 @@ public class AuthService : IAuthService
 
     public async Task<AuthResult> LoginAsync(LoginRequest request)
     {
-        // TODO: Implement login
-        return new AuthResult();
+        var user = await _authRepository.GetUserByCredentialsAsync(
+            request.Email,
+            request.Password
+        );
+
+        if (user is null)
+        {
+            return new AuthResult
+            {
+                Succeeded = false,
+                Errors = new List<string>
+                {
+                    "Invalid email or password."
+                }
+            };
+        }
+
+        var token = await _jwtTokenService.GenerateTokenAsync(user);
+
+        return new AuthResult
+        {
+            Succeeded = true,
+            Token = token
+        };
     }
 }
