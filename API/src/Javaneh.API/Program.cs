@@ -8,6 +8,8 @@ using Javaneh.Infrastructure.Identity;
 using Javaneh.Infrastructure.Persistence;
 using Javaneh.Infrastructure.Persistence.Repositories;
 using Javaneh.Infrastructure.Persistence.Repositories.Auth;
+using Javaneh.Infrastructure.Services.Auth;
+using Javaneh.Infrastructure.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,7 +29,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Swagger
 builder.Services.AddSwaggerGen();
-
+// jwt settings
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("Jwt")
+);
 // Application Services
 builder.Services.AddScoped<IUserservices, UsersServices>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -35,6 +40,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUsersRepository, UserRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 // ASP.NET Core Identity
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services
     .AddIdentityCore<ApplicationUser>(options =>
     {

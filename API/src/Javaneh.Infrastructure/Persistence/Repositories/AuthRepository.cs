@@ -1,4 +1,3 @@
-
 using Javaneh.Application.Interface.Repository.Auth;
 using Javaneh.Domain.Entities;
 using Javaneh.Infrastructure.Identity;
@@ -15,6 +14,7 @@ public class AuthRepository : IAuthRepository
         _userManager = userManager;
     }
 
+    // Register
     public async Task<IdentityResult> RegisterAsync(User user, string password)
     {
         var applicationUser = new ApplicationUser
@@ -31,6 +31,7 @@ public class AuthRepository : IAuthRepository
         return await _userManager.CreateAsync(applicationUser, password);
     }
 
+    // Get User By Email
     public async Task<User?> GetByEmailAsync(string email)
     {
         var applicationUser = await _userManager.FindByEmailAsync(email);
@@ -38,6 +39,33 @@ public class AuthRepository : IAuthRepository
         if (applicationUser is null)
             return null;
 
+        return MapToDomainUser(applicationUser);
+    }
+
+    // Login
+    public async Task<User?> GetUserByCredentialsAsync(
+        string email,
+        string password)
+    {
+        var applicationUser = await _userManager.FindByEmailAsync(email);
+
+        if (applicationUser is null)
+            return null;
+
+        var isPasswordValid = await _userManager.CheckPasswordAsync(
+            applicationUser,
+            password
+        );
+
+        if (!isPasswordValid)
+            return null;
+
+        return MapToDomainUser(applicationUser);
+    }
+
+    // Mapping
+    private static User MapToDomainUser(ApplicationUser applicationUser)
+    {
         return new User
         {
             Id = applicationUser.Id,
@@ -47,15 +75,5 @@ public class AuthRepository : IAuthRepository
             PhoneNumber = applicationUser.PhoneNumber ?? string.Empty,
             DateOfBirth = applicationUser.DateOfBirth
         };
-    }
-
-    public async Task<bool> CheckPasswordAsync(User user, string password)
-    {
-        var applicationUser = await _userManager.FindByEmailAsync(user.Email);
-
-        if (applicationUser is null)
-            return false;
-
-        return await _userManager.CheckPasswordAsync(applicationUser, password);
     }
 }

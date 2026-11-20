@@ -29,4 +29,24 @@ public class AuthController : BaseApiController
 
         return Ok("User registered successfully");
     }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(
+        [FromBody] LoginRequest request)
+    {
+        var result = await _authService.LoginAsync(request);
+
+        if (!result.Succeeded)
+        {
+            return Unauthorized(new
+            {
+                Errors = result.Errors
+            });
+        }
+
+        return Ok(new
+        {
+            Token = result.Token
+        });
+    }
 }
