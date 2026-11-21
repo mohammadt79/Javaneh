@@ -17,4 +17,25 @@ public class UsersSessionService : IUsersSessionService
     {
         await _usersSessionsRepository.AddAsync(userSessions);
     }
+
+    public async Task<bool> IsUserLoggedIn(Guid userId)
+    {
+        var session = await _usersSessionsRepository
+            .GetActiveSessionByUserIdAsync(userId);
+
+        return session != null;
+    }
+
+    public async Task RevokeActiveSessionAsync(Guid userId)
+    {
+        var session = await _usersSessionsRepository
+            .GetActiveSessionByUserIdAsync(userId);
+
+        if (session is null)
+            return;
+
+        session.RevokedAt = DateTime.UtcNow;
+
+        _usersSessionsRepository.Update(session);
+    }
 }

@@ -76,6 +76,10 @@ public class AuthService : IAuthService
             };
         }
 
+        // Revoke previous active session
+        await _usersSessionService.RevokeActiveSessionAsync(user.Id);
+
+        // Create new session
         var sessionId = Guid.NewGuid();
 
         var session = new UserSessions
@@ -90,6 +94,7 @@ public class AuthService : IAuthService
 
         await _usersSessionService.AddSessionService(session);
 
+        // Generate JWT
         var token = await _jwtTokenService.GenerateTokenAsync(user);
 
         return new AuthResult
