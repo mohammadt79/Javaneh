@@ -1,4 +1,5 @@
 
+using Javaneh.Domain.Entities;
 using Javaneh.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -20,4 +21,6 @@ public class AppDbContext : IdentityDbContext<
     {
         base.OnModelCreating(builder);
     }
+    public DbSet<UserSessions> UserSessions => Set<UserSessions>();
+
 }
