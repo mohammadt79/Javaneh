@@ -10,6 +10,7 @@ using Javaneh.Infrastructure.Identity;
 using Javaneh.Infrastructure.Persistence;
 using Javaneh.Infrastructure.Persistence.Repositories;
 using Javaneh.Infrastructure.Persistence.Repositories.Auth;
+using Javaneh.Infrastructure.Persistence.Repositories.UsersSessionRepository;
 using Javaneh.Infrastructure.Services.Auth;
 using Javaneh.Infrastructure.Settings;
 using Microsoft.AspNetCore.Identity;
@@ -43,6 +44,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 // Applications Repositories
 builder.Services.AddScoped<IUsersRepository, UserRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IUserSessionsRepository, UsersSessionRepository>();
 // ASP.NET Core Identity
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services
