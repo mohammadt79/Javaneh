@@ -1,4 +1,5 @@
 
+using Javaneh.API.Filters;
 using Javaneh.API.Middleware;
 using Javaneh.Application.Interface.Repository.Auth;
 using Javaneh.Application.Interface.Repository.Users;
@@ -17,8 +18,10 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Controllers
-builder.Services.AddControllers();
-
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<GlobalResultHandling>();
+});
 // Data Protection
 builder.Services.AddDataProtection();
 
