@@ -1,6 +1,8 @@
+using Javaneh.Domain.Entities;
+
 namespace Javaneh.Application.Interface.Repository.Users;
 
-public interface IUserSessionsRepository
+public interface IUserSessionsRepository : IRepository<UserSessions>
 {
 
 }

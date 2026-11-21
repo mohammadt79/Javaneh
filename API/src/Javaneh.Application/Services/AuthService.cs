@@ -1,6 +1,8 @@
+
 using Javaneh.Application.DTOs.Auth;
 using Javaneh.Application.Interface.Repository.Auth;
 using Javaneh.Application.Interface.Services.Auth;
+using Javaneh.Application.Interface.Services;
 using Javaneh.Domain.Entities;
 
 namespace Javaneh.Application.Services.Auth;
@@ -9,13 +11,16 @@ public class AuthService : IAuthService
 {
     private readonly IAuthRepository _authRepository;
     private readonly IJwtTokenService _jwtTokenService;
+    private readonly IUsersSessionService _usersSessionService;
 
     public AuthService(
         IAuthRepository authRepository,
-        IJwtTokenService jwtTokenService)
+        IJwtTokenService jwtTokenService,
+        IUsersSessionService usersSessionService)
     {
         _authRepository = authRepository;
         _jwtTokenService = jwtTokenService;
+        _usersSessionService = usersSessionService;
     }
 
     public async Task<AuthResult> RegisterAsync(RegisterRequest request)
@@ -70,6 +75,20 @@ public class AuthService : IAuthService
                 }
             };
         }
+
+        var sessionId = Guid.NewGuid();
+
+        var session = new UserSessions
+        {
+            Id = Guid.NewGuid(),
+            UserId = user.Id,
+            SessionId = sessionId,
+            CreatedAt = DateTime.UtcNow,
+            ExpiresAt = DateTime.UtcNow.AddMinutes(15),
+            RevokedAt = null
+        };
+
+        await _usersSessionService.AddSessionService(session);
 
         var token = await _jwtTokenService.GenerateTokenAsync(user);
 

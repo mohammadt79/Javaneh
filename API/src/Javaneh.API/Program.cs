@@ -5,6 +5,7 @@ using Javaneh.Application.Interface.Repository.Auth;
 using Javaneh.Application.Interface.Repository.Users;
 using Javaneh.Application.Interface.services.Users;
 using Javaneh.Application.Interface.Services.Auth;
+using Javaneh.Application.Services;
 using Javaneh.Application.Services.Auth;
 using Javaneh.Infrastructure.Identity;
 using Javaneh.Infrastructure.Persistence;
