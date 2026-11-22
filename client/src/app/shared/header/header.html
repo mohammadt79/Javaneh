@@ -1,0 +1,31 @@
+<header dir="rtl" class="w-full bg-[#fff9f0] border-b border-orange-100">
+  <div class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-6">
+    <!-- لوگو (سمت راست در RTL) -->
+    <a routerLink="/" class="flex flex-col items-start leading-tight">
+      <span class="text-xl font-extrabold text-[#2d2260]">کلاسینو</span>
+      <span class="text-[10px] text-slate-500">یادگیری، کشف و بازی</span>
+    </a>
+
+    <!-- منوی ناوبری (وسط) -->
+    <nav class="hidden items-center gap-6 md:flex">
+      @for (item of navItems; track item.link) {
+        <a
+          [routerLink]="item.link"
+          routerLinkActive="text-[#6c4fe8] font-bold"
+          [routerLinkActiveOptions]="{ exact: item.link === '/' }"
+          class="text-xs text-slate-700 transition-colors hover:text-[#6c4fe8]"
+        >
+          {{ item.label }}
+        </a>
+      }
+    </nav>
+
+    <!-- بازگشت به خانه (سمت چپ در RTL) -->
+    <a
+      routerLink="/"
+      class="text-xs font-semibold text-[#6c4fe8] transition-colors hover:text-[#5a3fd0]"
+    >
+      بازگشت به خانه
+    </a>
+  </div>
+</header>

@@ -1,0 +1,134 @@
+<main dir="rtl" class="bg-cream">
+  <div class="mx-auto max-w-[1184px] px-4 md:px-0">
+    <div class="grid grid-cols-1 items-center gap-10 py-6 lg:grid-cols-2 lg:gap-16">
+      <!-- ستون فرم (سمت راست در RTL) -->
+      <section class="mx-auto w-full max-w-[440px] lg:mx-0">
+        <p class="mb-3 text-[11px] font-bold text-primary">بریم سراغ ادامه ماجرا</p>
+        <h1 class="text-3xl font-extrabold text-ink">سلام، خوش اومدی!</h1>
+        <p class="mt-4 text-[13px] text-slate-500">برای ادامه یادگیری، وارد حساب کاربری‌ات شو.</p>
+
+        <form [formGroup]="form" (ngSubmit)="submit()" class="mt-9">
+          <!-- شماره موبایل -->
+          <label for="mobile" class="mb-2 block text-[13px] font-bold text-ink">شماره موبایل</label>
+          <input
+            id="mobile"
+            type="tel"
+            inputmode="numeric"
+            formControlName="mobile"
+            placeholder="شماره موبایل ثبت‌شده"
+            class="h-[54px] w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-ink outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-4 focus:ring-primary/10"
+          />
+
+          <!-- رمز عبور -->
+          <label for="password" class="mb-2 mt-6 block text-[13px] font-bold text-ink"
+            >رمز عبور</label
+          >
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            class="h-[54px] w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-ink outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+          />
+
+          <!-- یادم بمون / فراموشی رمز -->
+          <div class="mt-4 flex items-center justify-between">
+            <label class="flex cursor-pointer items-center gap-2 text-xs text-slate-500">
+              <input
+                type="checkbox"
+                formControlName="remember"
+                class="size-5 cursor-pointer appearance-none rounded-md border border-slate-200 bg-white checked:border-primary checked:bg-primary"
+              />
+              یادم بمون
+            </label>
+            <a
+              routerLink="/forgot-password"
+              class="text-[11px] font-bold text-primary hover:underline"
+            >
+              رمز عبورت رو فراموش کردی؟
+            </a>
+          </div>
+
+          <!-- دکمه ورود -->
+          <button
+            type="submit"
+            class="mt-8 h-[52px] w-full rounded-2xl bg-primary text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:bg-primary/90 active:scale-[0.99]"
+          >
+            ورود به کلاسینو
+          </button>
+        </form>
+
+        <!-- ثبت‌نام -->
+        <div class="mt-8 flex items-center justify-between text-sm">
+          <span class="text-slate-500">هنوز حساب کاربری نداری؟</span>
+          <a routerLink="/register" class="font-bold text-primary hover:underline"
+            >رایگان ثبت‌نام کن</a
+          >
+        </div>
+
+        <!-- پیام والدین -->
+        <div class="mt-10 rounded-2xl bg-[#f0ebff] px-5 py-4 text-xs leading-6 text-ink">
+          والدین عزیز، با شماره موبایلی وارد شوید<br />
+          که هنگام ثبت‌نام استفاده کرده‌اید.
+        </div>
+      </section>
+
+      <!-- ستون کارت بنفش (سمت چپ در RTL) -->
+      <aside class="relative flex min-h-[716px] flex-col rounded-[40px] bg-[#d3c8ff] px-9 py-9">
+        <span class="w-fit rounded-full bg-white px-6 py-2.5 text-[11px] font-bold text-primary">
+          دوباره با هم
+        </span>
+
+        <h2 class="mt-12 text-[40px] font-extrabold leading-[1.75] text-ink">
+          به دنیای یادگیری<br />خوش برگشتی!
+        </h2>
+
+        <p class="mt-6 text-sm leading-7 text-ink/90">
+          با بازی‌های کوتاه، تمرین‌های جذاب و کلی کشف تازه،<br />
+          هر روز یک قدم جلوتر برو.
+        </p>
+
+        <!-- کارت چالش -->
+        <div class="mx-auto mt-12 w-full max-w-[404px] rounded-[28px] bg-white p-6">
+          <span
+            class="inline-block rounded-full bg-[#f0ebff] px-4 py-1.5 text-[10px] font-bold text-primary"
+          >
+            چالش کوچولوی امروز
+          </span>
+          <p class="mt-4 text-base font-bold text-ink">آماده‌ای ذهنت رو گرم کنی؟</p>
+          <p class="my-5 text-center text-[32px] font-extrabold text-ink" dir="rtl">۳ + ۲ = ؟</p>
+
+          <div class="grid grid-cols-3 gap-3">
+            @for (a of answers; track a) {
+              <button
+                type="button"
+                (click)="selectAnswer(a)"
+                class="h-8 rounded-lg text-sm font-bold transition"
+                [class]="
+                  selectedAnswer() === a
+                    ? 'bg-primary text-white'
+                    : 'bg-[#f5f2ea] text-ink hover:bg-[#ebe7db]'
+                "
+              >
+                {{ a.toLocaleString('fa-IR') }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- متن پایین کارت -->
+        <div class="mt-auto pt-10 text-center">
+          <p class="text-base font-bold text-ink">از پایه اول تا ششم، کنار تو هستیم</p>
+          <p class="mt-4 text-xs text-ink/80">
+            آموزش مفهومی <span class="mx-2">·</span> تمرین با بازی <span class="mx-2">·</span> فضای
+            امن کودک
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- فوتر -->
+  <footer class="pb-8 pt-4 text-center text-[11px] text-slate-500">
+    کلاسینو؛ هر روز، یک کشف تازه
+  </footer>
+</main>
