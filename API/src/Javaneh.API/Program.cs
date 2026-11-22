@@ -4,14 +4,17 @@ using Javaneh.API.Middleware;
 using Javaneh.Application.Interface.Repository.Auth;
 using Javaneh.Application.Interface.Repository.Users;
 using Javaneh.Application.Interface.services.Users;
+using Javaneh.Application.Interface.Services;
 using Javaneh.Application.Interface.Services.Auth;
 using Javaneh.Application.Services;
 using Javaneh.Application.Services.Auth;
 using Javaneh.Infrastructure.Identity;
 using Javaneh.Infrastructure.Persistence;
+using Javaneh.Infrastructure.Persistence.Logs;
 using Javaneh.Infrastructure.Persistence.Repositories;
 using Javaneh.Infrastructure.Persistence.Repositories.Auth;
 using Javaneh.Infrastructure.Persistence.Repositories.UsersSessionRepository;
+using Javaneh.Infrastructure.Services;
 using Javaneh.Infrastructure.Services.Auth;
 using Javaneh.Infrastructure.Settings;
 using Microsoft.AspNetCore.Identity;
@@ -32,6 +35,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")
     ));
+builder.Services.AddDbContext<LogsDbContext>(options =>
+options.UseSqlServer(
+    builder.Configuration.GetConnectionString("LogsConnection")
+));
 
 // Swagger
 builder.Services.AddSwaggerGen();
@@ -41,6 +48,10 @@ builder.Services.Configure<JwtSettings>(
 );
 // Application Services
 builder.Services.AddScoped<IUserservices, UsersServices>();
+builder.Services.AddScoped<
+    IUsersSessionService,
+    UsersSessionService>();
+builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 // Applications Repositories
 builder.Services.AddScoped<IUsersRepository, UserRepository>();
