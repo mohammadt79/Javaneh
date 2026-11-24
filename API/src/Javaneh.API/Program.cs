@@ -2,6 +2,7 @@
 using Javaneh.API.Filters;
 using Javaneh.API.Middleware;
 using Javaneh.Application.Interface.Repository.Auth;
+using Javaneh.Application.Interface.Repository.Logs;
 using Javaneh.Application.Interface.Repository.Users;
 using Javaneh.Application.Interface.services.Users;
 using Javaneh.Application.Interface.Services;
@@ -13,6 +14,7 @@ using Javaneh.Infrastructure.Persistence;
 using Javaneh.Infrastructure.Persistence.Logs;
 using Javaneh.Infrastructure.Persistence.Repositories;
 using Javaneh.Infrastructure.Persistence.Repositories.Auth;
+using Javaneh.Infrastructure.Persistence.Repositories.Logs;
 using Javaneh.Infrastructure.Persistence.Repositories.UsersSessionRepository;
 using Javaneh.Infrastructure.Services;
 using Javaneh.Infrastructure.Services.Auth;
@@ -40,6 +42,13 @@ options.UseSqlServer(
     builder.Configuration.GetConnectionString("LogsConnection")
 ));
 
+builder.Services.AddCors(option =>
+{
+    option.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+    });
+});
 // Swagger
 builder.Services.AddSwaggerGen();
 // jwt settings
@@ -57,6 +66,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUsersRepository, UserRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IUserSessionsRepository, UsersSessionRepository>();
+builder.Services.AddScoped<ILogRepository, LogRepository>();
 // ASP.NET Core Identity
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services
@@ -74,6 +84,7 @@ builder.Services
     .AddDefaultTokenProviders();
 
 var app = builder.Build();
+app.UseCors("AllowFrontend");
 
 app.UseMiddleware<GlobalExceptionHandling>();
 
