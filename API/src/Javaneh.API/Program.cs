@@ -41,12 +41,20 @@ builder.Services.AddDbContext<LogsDbContext>(options =>
 options.UseSqlServer(
     builder.Configuration.GetConnectionString("LogsConnection")
 ));
+builder.Services.Configure<AppSettings>(
+    builder.Configuration.GetSection("AppSettings"));
+var appSettings = builder.Configuration
+    .GetSection("AppSettings")
+    .Get<AppSettings>()!;
 
-builder.Services.AddCors(option =>
+builder.Services.AddCors(options =>
 {
-    option.AddPolicy("AllowFrontend", policy =>
+    options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+        policy
+            .WithOrigins(appSettings.Cors.AllowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
 // Swagger
