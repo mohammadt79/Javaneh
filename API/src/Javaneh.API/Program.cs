@@ -21,7 +21,10 @@ using Javaneh.Infrastructure.Services.Auth;
 using Javaneh.Infrastructure.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.OpenApi;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Controllers
@@ -58,8 +61,22 @@ builder.Services.AddCors(options =>
     });
 });
 // Swagger
-builder.Services.AddSwaggerGen();
-// jwt settings
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter your JWT token"
+    });
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+    });
+});// jwt settings
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("Jwt")
 );
@@ -90,9 +107,34 @@ builder.Services
     .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
 
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+
+            // IssuerSigningKey = new SymmetricSecurityKey(
+            //     Encoding.UTF8.GetBytes(
+            //         builder.Configuration["Jwt:SecretKey"]!
+            //     )
+            // )
+            IssuerSigningKey = new SymmetricSecurityKey(
+          Convert.FromBase64String(
+        builder.Configuration["Jwt:SecretKey"]!
+    )
+)
+        };
+    });
+builder.Services.AddAuthorization();
 var app = builder.Build();
-app.UseCors("AllowFrontend");
 
 app.UseMiddleware<GlobalExceptionHandling>();
 
@@ -106,6 +148,12 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
+app.UseCors("AllowFrontend");
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 
