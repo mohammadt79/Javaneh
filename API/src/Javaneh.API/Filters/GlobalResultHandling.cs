@@ -1,4 +1,5 @@
-
+using Javaneh.API.Contracts.Responses;
+using Javaneh.API.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -17,17 +18,22 @@ public class GlobalResultHandling : IActionFilter
 
         if (context.Result is ObjectResult objectResult)
         {
-            var response = new
-            {
-                success = true,
-                statusCode = objectResult.StatusCode ?? 200,
-                data = objectResult.Value
-            };
+            var statusCode = objectResult.StatusCode ?? 200;
 
+            // create message response
+            var response = new ApiResponse<object>
+            {
+                Code = statusCode,
+                Message = ResponseMessageHelper.GetMessage(statusCode),
+                Data = objectResult.Value
+            };
+            // change controller message with this one
             context.Result = new ObjectResult(response)
             {
-                StatusCode = objectResult.StatusCode
+                StatusCode = statusCode
             };
         }
     }
+
+
 }

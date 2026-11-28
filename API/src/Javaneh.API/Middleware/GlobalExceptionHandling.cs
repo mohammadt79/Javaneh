@@ -1,6 +1,6 @@
-
 using System.Net;
-using System.Text.Json;
+using Javaneh.API.Contracts.Responses;
+using Javaneh.API.Helpers;
 
 namespace Javaneh.API.Middleware;
 
@@ -27,23 +27,38 @@ public class GlobalExceptionHandling
         {
             _logger.LogError(ex, "An unhandled exception occurred.");
 
-            await HandleExceptionAsync(context);
+            await HandleExceptionAsync(context, ex);
         }
     }
 
-    private static Task HandleExceptionAsync(HttpContext context)
+    private static Task HandleExceptionAsync(
+        HttpContext context,
+        Exception exception)
     {
-        context.Response.StatusCode =
-            (int)HttpStatusCode.InternalServerError;
+        var (statusCode, _) = exception switch
+        {
+            KeyNotFoundException =>
+                (HttpStatusCode.NotFound, ""),
 
+            UnauthorizedAccessException =>
+                (HttpStatusCode.Forbidden, ""),
+
+            ArgumentException =>
+                (HttpStatusCode.BadRequest, ""),
+
+            _ =>
+                (HttpStatusCode.InternalServerError, "")
+        };
+
+        context.Response.StatusCode = (int)statusCode;
         context.Response.ContentType = "application/json";
 
-        var result = JsonSerializer.Serialize(new
+        var response = new ApiResponse<object>
         {
-            statusCode = context.Response.StatusCode,
-            error = "An internal server error occurred."
-        });
-
-        return context.Response.WriteAsync(result);
+            Code = (int)statusCode,
+            Message = ResponseMessageHelper.GetMessage((int)statusCode),
+            Data = null
+        };
+        return context.Response.WriteAsJsonAsync(response);
     }
 }

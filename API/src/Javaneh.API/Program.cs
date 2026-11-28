@@ -1,22 +1,10 @@
 
 using Javaneh.API.Filters;
 using Javaneh.API.Middleware;
-using Javaneh.Application.Interface.Repository.Auth;
-using Javaneh.Application.Interface.Repository.Logs;
-using Javaneh.Application.Interface.Repository.Users;
-using Javaneh.Application.Interface.services.Users;
-using Javaneh.Application.Interface.Services;
 using Javaneh.Application.Interface.Services.Auth;
-using Javaneh.Application.Services;
-using Javaneh.Application.Services.Auth;
 using Javaneh.Infrastructure.Identity;
 using Javaneh.Infrastructure.Persistence;
 using Javaneh.Infrastructure.Persistence.Logs;
-using Javaneh.Infrastructure.Persistence.Repositories;
-using Javaneh.Infrastructure.Persistence.Repositories.Auth;
-using Javaneh.Infrastructure.Persistence.Repositories.Logs;
-using Javaneh.Infrastructure.Persistence.Repositories.UsersSessionRepository;
-using Javaneh.Infrastructure.Services;
 using Javaneh.Infrastructure.Services.Auth;
 using Javaneh.Infrastructure.Settings;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Javaneh.Application;
 var builder = WebApplication.CreateBuilder(args);
 
 // Controllers
@@ -81,17 +69,11 @@ builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("Jwt")
 );
 // Application Services
-builder.Services.AddScoped<IUserservices, UsersServices>();
-builder.Services.AddScoped<
-    IUsersSessionService,
-    UsersSessionService>();
-builder.Services.AddScoped<ILogService, LogService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddApplication();
+
 // Applications Repositories
-builder.Services.AddScoped<IUsersRepository, UserRepository>();
-builder.Services.AddScoped<IAuthRepository, AuthRepository>();
-builder.Services.AddScoped<IUserSessionsRepository, UsersSessionRepository>();
-builder.Services.AddScoped<ILogRepository, LogRepository>();
+builder.Services.AddInfrastructure();
 // ASP.NET Core Identity
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services
