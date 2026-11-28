@@ -8,8 +8,8 @@ export interface LoginResponse {
 }
 
 export interface ApiResponse<T> {
-  success: boolean;
-  statusCode: number;
+  code: number;
+  message: string;
   data: T;
 }
 

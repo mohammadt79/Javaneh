@@ -1,0 +1,236 @@
+<main dir="rtl" class="bg-cream">
+  @if (successMessage()) {
+    <div
+      role="status"
+      aria-live="polite"
+      class="fixed right-4 top-4 z-[100] rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-lg"
+    >
+      {{ successMessage() }}
+    </div>
+  }
+
+  <div class="mx-auto max-w-[1184px] px-4 md:px-0">
+    <div class="grid grid-cols-1 items-center gap-10 py-6 lg:grid-cols-2 lg:gap-16">
+      <section class="mx-auto w-full max-w-[440px] lg:mx-0">
+        <p class="mb-3 text-[11px] font-bold text-primary">اولین قدم برای کلی یادگیری</p>
+        <h1 class="text-3xl font-extrabold text-ink">عضو کلاسینو شو!</h1>
+        <p class="mt-4 text-[13px] text-slate-500">حساب رو بساز و یادگیری رو با بازی شروع کن.</p>
+
+        <form [formGroup]="form" (ngSubmit)="submit()" class="mt-9">
+          <label for="firstName" class="mb-2 block text-[13px] font-bold text-ink">نام</label>
+          <input
+            id="firstName"
+            type="text"
+            autocomplete="given-name"
+            formControlName="firstName"
+            placeholder="نامت رو بنویس"
+            [attr.aria-invalid]="form.controls.firstName.invalid && form.controls.firstName.touched"
+            class="h-[54px] w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-ink outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-4 focus:ring-primary/10"
+          />
+          @if (form.controls.firstName.touched && form.controls.firstName.hasError('required')) {
+            <p class="mt-2 text-xs text-red-600">نام را وارد کن.</p>
+          }
+
+          <label for="lastName" class="mb-2 mt-6 block text-[13px] font-bold text-ink"
+            >نام خانوادگی</label
+          >
+          <input
+            id="lastName"
+            type="text"
+            autocomplete="family-name"
+            formControlName="lastName"
+            placeholder="نام خانوادگی‌ات رو بنویس"
+            [attr.aria-invalid]="form.controls.lastName.invalid && form.controls.lastName.touched"
+            class="h-[54px] w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-ink outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-4 focus:ring-primary/10"
+          />
+          @if (form.controls.lastName.touched && form.controls.lastName.hasError('required')) {
+            <p class="mt-2 text-xs text-red-600">نام خانوادگی را وارد کن.</p>
+          }
+
+          <label for="email" class="mb-2 mt-6 block text-[13px] font-bold text-ink">ایمیل</label>
+          <input
+            id="email"
+            type="email"
+            inputmode="email"
+            autocomplete="email"
+            formControlName="email"
+            placeholder="ایمیلت رو وارد کن"
+            [attr.aria-invalid]="form.controls.email.invalid && form.controls.email.touched"
+            class="h-[54px] w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-ink outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-4 focus:ring-primary/10"
+          />
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <p class="mt-2 text-xs text-red-600">یک ایمیل معتبر وارد کن.</p>
+          }
+
+          <label for="phoneNumber" class="mb-2 mt-6 block text-[13px] font-bold text-ink"
+            >شماره موبایل والدین</label
+          >
+          <input
+            id="phoneNumber"
+            type="tel"
+            inputmode="tel"
+            autocomplete="tel"
+            formControlName="phoneNumber"
+            placeholder="۰۹۱۲ ۳۴۵ ۶۷۸۹"
+            [attr.aria-invalid]="
+              form.controls.phoneNumber.invalid && form.controls.phoneNumber.touched
+            "
+            class="h-[54px] w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-ink outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-4 focus:ring-primary/10"
+          />
+          @if (
+            form.controls.phoneNumber.touched && form.controls.phoneNumber.hasError('required')
+          ) {
+            <p class="mt-2 text-xs text-red-600">شماره موبایل والدین را وارد کن.</p>
+          }
+
+          <label for="dateOfBirth" class="mb-2 mt-6 block text-[13px] font-bold text-ink"
+            >تاریخ تولد</label
+          >
+          <input
+            id="dateOfBirth"
+            type="date"
+            autocomplete="bday"
+            formControlName="dateOfBirth"
+            [attr.aria-invalid]="
+              form.controls.dateOfBirth.invalid && form.controls.dateOfBirth.touched
+            "
+            class="h-[54px] w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-ink outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+          />
+          @if (
+            form.controls.dateOfBirth.touched && form.controls.dateOfBirth.hasError('required')
+          ) {
+            <p class="mt-2 text-xs text-red-600">تاریخ تولد را وارد کن.</p>
+          }
+
+          <label for="password" class="mb-2 mt-6 block text-[13px] font-bold text-ink"
+            >رمز عبور</label
+          >
+          <input
+            id="password"
+            type="password"
+            autocomplete="new-password"
+            formControlName="password"
+            placeholder="حداقل ۸ کاراکتر"
+            [attr.aria-invalid]="form.controls.password.invalid && form.controls.password.touched"
+            class="h-[54px] w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-ink outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-4 focus:ring-primary/10"
+          />
+          <p class="mt-2 text-[11px] text-slate-500">
+            رمز باید حداقل ۸ کاراکتر و شامل حروف کوچک، بزرگ و عدد باشد.
+          </p>
+          @if (form.controls.password.touched && form.controls.password.invalid) {
+            <p class="mt-2 text-xs text-red-600">رمز عبور با شرایط گفته‌شده مطابقت ندارد.</p>
+          }
+
+          <label for="confirmPassword" class="mb-2 mt-6 block text-[13px] font-bold text-ink"
+            >تکرار رمز عبور</label
+          >
+          <input
+            id="confirmPassword"
+            type="password"
+            autocomplete="new-password"
+            formControlName="confirmPassword"
+            placeholder="رمز عبورت رو دوباره وارد کن"
+            [attr.aria-invalid]="
+              form.controls.confirmPassword.invalid && form.controls.confirmPassword.touched
+            "
+            class="h-[54px] w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-ink outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-4 focus:ring-primary/10"
+          />
+          @if (
+            form.controls.confirmPassword.touched && form.controls.confirmPassword.hasError('required')
+          ) {
+            <p class="mt-2 text-xs text-red-600">تکرار رمز عبور را وارد کن.</p>
+          }
+
+          @if (errorMessage()) {
+            <p role="alert" class="mt-3 text-sm text-red-600">{{ errorMessage() }}</p>
+          }
+
+          <label class="mt-5 flex cursor-pointer items-center gap-2 text-xs text-slate-500">
+            <input
+              type="checkbox"
+              formControlName="terms"
+              class="size-5 shrink-0 cursor-pointer appearance-none rounded-md border border-slate-200 bg-white checked:border-primary checked:bg-primary"
+            />
+            با قوانین کلاسینو و حریم خصوصی موافقم.
+          </label>
+          @if (form.controls.terms.touched && form.controls.terms.invalid) {
+            <p class="mt-2 text-xs text-red-600">برای ادامه با قوانین موافقت کن.</p>
+          }
+
+          <button
+            type="submit"
+            [disabled]="isSubmitting()"
+            class="mt-8 h-[52px] w-full rounded-2xl bg-primary text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:bg-primary/90 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {{ isSubmitting() ? 'در حال ساخت حساب...' : 'ساخت حساب کاربری' }}
+          </button>
+        </form>
+
+        <div class="mt-8 flex items-center justify-between text-sm">
+          <span class="text-slate-500">قبلاً ثبت‌نام کردی؟</span>
+          <a routerLink="/auth/login" class="font-bold text-primary hover:underline"
+            >وارد حساب شو</a
+          >
+        </div>
+
+        <p class="mt-10 text-center text-[11px] text-slate-500">
+          ثبت‌نام با همراهی والدین انجام می‌شود.
+        </p>
+      </section>
+
+      <aside class="relative flex min-h-[716px] flex-col rounded-[40px] bg-[#d3c8ff] px-9 py-9">
+        <span class="w-fit rounded-full bg-white px-6 py-2.5 text-[11px] font-bold text-primary">
+          یک شروع تازه
+        </span>
+
+        <h2 class="mt-12 text-[40px] font-extrabold leading-[1.75] text-ink">
+          ماجراجویی یادگیری<br />از اینجا شروع می‌شه!
+        </h2>
+
+        <p class="mt-6 text-sm leading-7 text-ink/90">
+          با بازی‌های کوتاه، تمرین‌های جذاب و کلی کشف تازه،<br />
+          هر روز یک قدم جلوتر برو.
+        </p>
+
+        <div class="mx-auto mt-12 w-full max-w-[404px] rounded-[28px] bg-white p-6">
+          <span
+            class="inline-block rounded-full bg-[#f0ebff] px-4 py-1.5 text-[10px] font-bold text-primary"
+          >
+            چالش کوچولوی امروز
+          </span>
+          <p class="mt-4 text-base font-bold text-ink">آماده‌ای ذهنت رو گرم کنی؟</p>
+          <p class="my-5 text-center text-[32px] font-extrabold text-ink" dir="rtl">۳ + ۲ = ؟</p>
+
+          <div class="grid grid-cols-3 gap-3">
+            @for (answer of answers; track answer) {
+              <button
+                type="button"
+                (click)="selectAnswer(answer)"
+                [class]="
+                  selectedAnswer() === answer
+                    ? 'bg-primary text-white'
+                    : 'bg-[#f5f2ea] text-ink hover:bg-[#ebe7db]'
+                "
+                class="h-8 rounded-lg text-sm font-bold transition"
+              >
+                {{ answer.toLocaleString('fa-IR') }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="mt-auto pt-10 text-center">
+          <p class="text-base font-bold text-ink">از پایه اول تا ششم، کنار تو هستیم</p>
+          <p class="mt-4 text-xs text-ink/80">
+            آموزش مفهومی <span class="mx-2">·</span> تمرین با بازی <span class="mx-2">·</span> فضای
+            امن کودک
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <footer class="pb-8 pt-4 text-center text-[11px] text-slate-500">
+    کلاسینو؛ هر روز، یک کشف تازه
+  </footer>
+</main>
